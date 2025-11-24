@@ -23,6 +23,12 @@ if ($totalCards <= 12) {
 }
 ?>
 
+<style>
+.card-button:hover {
+    transform: scale(1.05);
+}
+</style>
+
 <div style="max-width: 900px; margin: 20px auto; padding: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
         <h1 style="margin: 0;"><?= htmlspecialchars($title ?? 'Memory Game', ENT_QUOTES, 'UTF-8') ?></h1>
@@ -64,8 +70,10 @@ if ($totalCards <= 12) {
                 ">
                     <img src="<?= htmlspecialchars($card['image_path'] ?? '', ENT_QUOTES, 'UTF-8') ?>" 
                          alt="Carte <?= (int)($card['image_id'] ?? 0) ?>"
-                         style="max-width: 90%; max-height: 90%; object-fit: contain;"
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span>✓</span>';">
+                         style="max-width: 90%; max-height: 90%; object-fit: contain;">
+                    <?php if (!file_exists(__DIR__ . '/../../../public' . ($card['image_path'] ?? ''))): ?>
+                        <span>✓</span>
+                    <?php endif; ?>
                 </div>
             <?php elseif ($isFlipped): ?>
                 <!-- Carte retournée -->
@@ -81,14 +89,16 @@ if ($totalCards <= 12) {
                 ">
                     <img src="<?= htmlspecialchars($card['image_path'] ?? '', ENT_QUOTES, 'UTF-8') ?>" 
                          alt="Carte <?= (int)($card['image_id'] ?? 0) ?>"
-                         style="max-width: 90%; max-height: 90%; object-fit: contain;"
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px;><?= (int)($card['image_id'] ?? 0) ?></span>';">
+                         style="max-width: 90%; max-height: 90%; object-fit: contain;">
+                    <?php if (!file_exists(__DIR__ . '/../../../public' . ($card['image_path'] ?? ''))): ?>
+                        <span style="font-size:24px;"><?= (int)($card['image_id'] ?? 0) ?></span>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
                 <!-- Carte face cachée - cliquable -->
                 <form method="POST" action="/game/flip" style="margin: 0;">
                     <input type="hidden" name="card_id" value="<?= (int)$cardId ?>">
-                    <button type="submit" style="
+                    <button type="submit" class="card-button" style="
                         width: 100%;
                         aspect-ratio: 1;
                         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -97,8 +107,7 @@ if ($totalCards <= 12) {
                         cursor: pointer;
                         font-size: 24px;
                         color: white;
-                        transition: transform 0.1s;
-                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    ">
                         ?
                     </button>
                 </form>

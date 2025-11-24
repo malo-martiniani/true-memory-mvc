@@ -87,7 +87,15 @@ class AuthController extends BaseController
      */
     public function logout(): void
     {
+        // Détruit toutes les variables de session
+        $_SESSION = [];
+        
+        // Détruit la session
         session_destroy();
+        
+        // Démarre une nouvelle session pour les messages flash éventuels
+        session_start();
+        
         header('Location: /login');
         exit;
     }

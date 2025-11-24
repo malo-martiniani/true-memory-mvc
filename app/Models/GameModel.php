@@ -225,17 +225,14 @@ class GameModel
         $card1Id = $this->flippedCards[0];
         $card2Id = $this->flippedCards[1];
 
-        $card1 = null;
-        $card2 = null;
-
-        foreach ($this->cards as &$card) {
-            if ($card['id'] === $card1Id) {
-                $card1 = &$card;
-            }
-            if ($card['id'] === $card2Id) {
-                $card2 = &$card;
-            }
+        // Utilise un mapping pour une recherche O(1) au lieu de O(n)
+        $cardMap = [];
+        foreach ($this->cards as $key => &$card) {
+            $cardMap[$card['id']] = &$card;
         }
+        
+        $card1 = &$cardMap[$card1Id];
+        $card2 = &$cardMap[$card2Id];
 
         if ($card1['image_id'] === $card2['image_id']) {
             // C'est une paire !
