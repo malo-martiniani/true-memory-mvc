@@ -1,3 +1,5 @@
 /vendor/
 .env
-/public/assets/img/*
+/public/assets/img/*.jpg
+/public/assets/img/*.png
+/public/assets/img/*.gif
