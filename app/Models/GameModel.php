@@ -243,6 +243,9 @@ class GameModel
             $card2['is_matched'] = true;
             $this->matchedPairs[] = $card1['image_id'];
             
+            // Réinitialise les cartes retournées après un match réussi
+            $this->flippedCards = [];
+            
             return [
                 'status' => 'match',
                 'card1_id' => $card1Id,
