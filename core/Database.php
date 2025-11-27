@@ -31,7 +31,7 @@ class Database
             // Paramètres de connexion
             $host = $_ENV['DB_HOST'] ?? 'localhost';
             $port = isset($_ENV['DB_PORT']) && $_ENV['DB_PORT'] !== '' ? ';port=' . $_ENV['DB_PORT'] : '';
-            $dsn = 'mysql:host=' . $host . $port . ';dbname=' . ($_ENV['DB_NAME'] ?? 'mvc') . ';charset=utf8mb4';
+            $dsn = 'mysql:host=' . $host . $port . ';dbname=' . ($_ENV['DB_NAME'] ?? 'memory_db') . ';charset=utf8mb4';
             $user = $_ENV['DB_USER'] ?? 'root';
             $pass = $_ENV['DB_PASSWORD'] ?? '';
 

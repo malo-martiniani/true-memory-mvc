@@ -34,9 +34,9 @@ $router->get('/login', 'App\\Controllers\\AuthController@login');
 // Routes du jeu de mémoire
 $router->get('/game/difficulty', 'App\\Controllers\\GameController@difficulty');
 $router->get('/game/play', 'App\\Controllers\\GameController@play');
-$router->get('/game/no-match', 'App\\Controllers\\GameController@noMatch');
 $router->get('/game/victory', 'App\\Controllers\\GameController@victory');
 $router->get('/game/leaderboard', 'App\\Controllers\\GameController@leaderboard');
+$router->get('/game/continue', 'App\\Controllers\\GameController@continueGame');
 $router->get('/logout', 'App\\Controllers\\AuthController@logout');
 
 // Routes POST

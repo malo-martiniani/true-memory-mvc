@@ -89,9 +89,24 @@ class GameController extends BaseController
 
         $game = $_SESSION['game'];
 
+        // Vérifie s'il y a eu une erreur de correspondance (mismatch)
+        // Ou si on est bloqué avec 2 cartes retournées (rechargement page, etc.)
+        $mismatch = false;
+        $pendingMismatch = count($game['flipped_cards'] ?? []) >= 2;
+
+        if (isset($_SESSION['mismatch'])) {
+            $mismatch = true;
+            unset($_SESSION['mismatch']);
+        } elseif ($pendingMismatch) {
+            // Si on a 2 cartes retournées sans flag mismatch, on force le mode mismatch
+            // pour déclencher la redirection automatique et débloquer le jeu
+            $mismatch = true;
+        }
+
         $this->render('game/play', [
             'title' => 'Memory Game - Difficulté: ' . $game['difficulty'] . ' paires',
-            'game' => $game
+            'game' => $game,
+            'mismatch' => $mismatch
         ]);
     }
 
@@ -105,16 +120,31 @@ class GameController extends BaseController
         $this->requireAuth();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            if ($this->isJsonRequest()) {
+                echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+                exit;
+            }
             header('Location: /game/play');
             exit;
         }
 
         if (!isset($_SESSION['game'])) {
+            if ($this->isJsonRequest()) {
+                echo json_encode(['status' => 'error', 'message' => 'Game not started']);
+                exit;
+            }
             header('Location: /game/difficulty');
             exit;
         }
 
-        $cardId = (int)($_POST['card_id'] ?? 0);
+        // Handle JSON input or Form input
+        $cardId = 0;
+        if ($this->isJsonRequest()) {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $cardId = (int)($input['card_id'] ?? 0);
+        } else {
+            $cardId = (int)($_POST['card_id'] ?? 0);
+        }
 
         // Reconstruit le modèle de jeu depuis la session
         $game = new GameModel($_SESSION['game']['difficulty']);
@@ -140,14 +170,46 @@ class GameController extends BaseController
                 'moves' => $game->getMoves(),
                 'time' => $game->getElapsedTime()
             ];
+            
+            if ($this->isJsonRequest()) {
+                echo json_encode(array_merge($result, [
+                    'redirect' => '/game/victory',
+                    'moves' => $game->getMoves(),
+                    'pairs_found' => count($game->getMatchedPairs())
+                ]));
+                exit;
+            }
+
             header('Location: /game/victory');
             exit;
         }
 
-        // Si pas de match, redirige vers une page de transition
+        // Si pas de match
         if ($result['status'] === 'no_match') {
-            $_SESSION['no_match'] = true;
-            header('Location: /game/no-match');
+            if ($this->isJsonRequest()) {
+                // Pour AJAX, on réinitialise immédiatement l'état en session pour le prochain appel
+                // Le client gérera l'animation de retournement
+                $game->resetFlippedCards();
+                $_SESSION['game']['cards'] = $game->getCards();
+                $_SESSION['game']['flipped_cards'] = [];
+                
+                echo json_encode(array_merge($result, [
+                    'moves' => $game->getMoves(),
+                    'pairs_found' => count($game->getMatchedPairs())
+                ]));
+                exit;
+            }
+
+            $_SESSION['mismatch'] = true;
+            header('Location: /game/play');
+            exit;
+        }
+
+        if ($this->isJsonRequest()) {
+            echo json_encode(array_merge($result, [
+                'moves' => $game->getMoves(),
+                'pairs_found' => count($game->getMatchedPairs())
+            ]));
             exit;
         }
 
@@ -156,33 +218,11 @@ class GameController extends BaseController
     }
 
     /**
-     * Affiche une page de transition après un échec de match
-     *
-     * @return void
+     * Helper to detect JSON requests
      */
-    public function noMatch(): void
+    private function isJsonRequest(): bool
     {
-        $this->requireAuth();
-
-        if (!isset($_SESSION['no_match']) || !isset($_SESSION['game'])) {
-            header('Location: /game/play');
-            exit;
-        }
-
-        unset($_SESSION['no_match']);
-
-        // Reconstruit le modèle de jeu
-        $game = new GameModel($_SESSION['game']['difficulty']);
-        $game->setCards($_SESSION['game']['cards']);
-        $game->setFlippedCards($_SESSION['game']['flipped_cards']);
-        $game->setMatchedPairs($_SESSION['game']['matched_pairs']);
-        $game->setMoves($_SESSION['game']['moves']);
-        $game->setStartTime($_SESSION['game']['start_time']);
-
-        $this->render('game/no-match', [
-            'title' => 'Pas de paire',
-            'game' => $_SESSION['game']
-        ]);
+        return isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false;
     }
 
     /**

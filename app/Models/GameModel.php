@@ -36,20 +36,27 @@ class GameModel
     {
         $this->cards = [];
         
+        // Sélectionne des images aléatoires parmi les 12 disponibles
+        // Cela garantit qu'on n'a jamais deux paires avec la même image
+        // et que les images changent d'une partie à l'autre (pour les difficultés < 12)
+        $availableImages = range(1, 12);
+        shuffle($availableImages);
+        $selectedImages = array_slice($availableImages, 0, $this->difficulty);
+        
         // Génère les paires de cartes avec des IDs uniques
-        for ($i = 1; $i <= $this->difficulty; $i++) {
+        foreach ($selectedImages as $index => $imageId) {
             // Chaque paire a le même image_id mais des positions différentes
             $this->cards[] = [
-                'id' => $i * 2 - 1,
-                'image_id' => $i,
-                'image_path' => "/assets/img/card-{$i}.jpg",
+                'id' => $index * 2 + 1,
+                'image_id' => $imageId,
+                'image_path' => "/assets/img/card-{$imageId}.jpg",
                 'is_flipped' => false,
                 'is_matched' => false
             ];
             $this->cards[] = [
-                'id' => $i * 2,
-                'image_id' => $i,
-                'image_path' => "/assets/img/card-{$i}.jpg",
+                'id' => $index * 2 + 2,
+                'image_id' => $imageId,
+                'image_path' => "/assets/img/card-{$imageId}.jpg",
                 'is_flipped' => false,
                 'is_matched' => false
             ];

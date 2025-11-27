@@ -58,7 +58,6 @@
 - `auth/login.php` - Login form
 - `game/difficulty.php` - Difficulty selection
 - `game/play.php` - Game board with cards
-- `game/no-match.php` - Transition after failed match
 - `game/victory.php` - Victory screen with statistics
 - `game/leaderboard.php` - Scores table with filtering
 

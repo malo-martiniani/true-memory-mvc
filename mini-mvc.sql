@@ -1,7 +1,7 @@
--- Script SQL de base pour le mini-projet MVC
+-- Script SQL de base pour le mini-projet memory_db
 
-CREATE DATABASE IF NOT EXISTS mvc CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE mvc;
+CREATE DATABASE IF NOT EXISTS memory_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE memory_db;
 
 CREATE TABLE articles (
     id INT AUTO_INCREMENT PRIMARY KEY,

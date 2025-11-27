@@ -38,7 +38,6 @@ Un jeu de mémoire complet implémenté en PHP suivant le pattern MVC.
 │       ├── game/
 │       │   ├── difficulty.php      # Sélection difficulté
 │       │   ├── play.php            # Plateau de jeu
-│       │   ├── no-match.php        # Transition échec
 │       │   ├── victory.php         # Page de victoire
 │       │   └── leaderboard.php     # Tableau des scores
 │       ├── home/
@@ -89,7 +88,7 @@ Copier `.env.example` vers `.env` et configurer :
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
-DB_NAME=mvc
+DB_NAME=memory_db
 DB_PORT=3306
 ```
 
@@ -201,7 +200,6 @@ Coordonnent modèles et vues :
 - `/logout` - Déconnexion
 - `/game/difficulty` - Sélection difficulté
 - `/game/play` - Plateau de jeu
-- `/game/no-match` - Transition échec
 - `/game/victory` - Page de victoire
 - `/game/leaderboard` - Classement
 - `/articles` - Liste articles (exemple)
