@@ -30,6 +30,17 @@ class Router
     }
 
     /**
+     * Enregistre une route de type POST
+     *
+     * @param string $path   Chemin de la route (ex: "/articles")
+     * @param string $action Action à exécuter (ex: "App\Controllers\ArticleController@store")
+     */
+    public function post(string $path, string $action): void
+    {
+        $this->routes['POST'][$path] = $action;
+    }
+
+    /**
      * Méthode principale qui analyse l'URI demandée
      * et exécute le contrôleur/méthode correspondant si trouvé.
      *
