@@ -16,10 +16,10 @@
 <!-- Section Memory Game -->
 <div style="background-color: #e7f3ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
   <h2 style="margin-top: 0;">🎮 Memory Game</h2>
-  <p>
+  <p style=color:black>
     Testez votre mémoire avec notre jeu de cartes ! Trouvez toutes les paires en un minimum de coups.
   </p>
-  <ul style="line-height: 1.8;">
+  <ul style="line-height: 1.8;color:black">
     <li>Choisissez votre difficulté (de 3 à 12 paires)</li>
     <li>Retournez les cartes pour trouver les paires</li>
     <li>Enregistrez vos scores et comparez-vous aux autres joueurs</li>
@@ -34,13 +34,8 @@
         Se connecter pour jouer
       </a>
     <?php endif; ?>
-    <a href="/game/leaderboard" style="display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px;">
+    <a href="/game/leaderboard" style="display: inline-block; padding: 10px 20px; background-color: #00060aff; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px;">
       Voir les scores
     </a>
   </div>
 </div>
-
-<!-- Exemple d'amélioration : proposer un lien vers la liste des articles -->
-<p>
-  <a href="/articles">Voir la liste des articles</a>
-</p>

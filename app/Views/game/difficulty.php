@@ -10,9 +10,9 @@
 
     <div style="background-color: #e7f3ff; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
         <p style="margin: 0;">
-            <strong>Bienvenue <?= htmlspecialchars($_SESSION['username'] ?? '', ENT_QUOTES, 'UTF-8') ?> !</strong>
+            <strong style=color:black>Bienvenue <?= htmlspecialchars($_SESSION['username'] ?? '', ENT_QUOTES, 'UTF-8') ?> !</strong>
         </p>
-        <p style="margin: 10px 0 0 0; font-size: 14px;">
+        <p style="margin: 10px 0 0 0; font-size: 14px;color:black">
             Choisissez le nombre de paires de cartes pour commencer une nouvelle partie.
         </p>
     </div>
